@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void encryptPoly(char *plaintext, char *key, char *ciphertext) {
+    int i, j = 0;
+    for (i = 0; plaintext[i] != '\0'; i++) {
+        char ch = toupper(plaintext[i]);
+        char k = toupper(key[j % strlen(key)]);
+
+        if (ch >= 'A' && ch <= 'Z') {
+            ciphertext[i] = ((ch - 'A') + (k - 'A')) % 26 + 'A';
+            j++;
+        } else {
+            ciphertext[i] = ch;
+        }
+    }
+    ciphertext[i] = '\0';
+}
+
+void decryptPoly(char *ciphertext, char *key, char *decrypted) {
+    int i, j = 0;
+    for (i = 0; ciphertext[i] != '\0'; i++) {
+        char ch = toupper(ciphertext[i]);
+        char k = toupper(key[j % strlen(key)]);
+
+        if (ch >= 'A' && ch <= 'Z') {
+            decrypted[i] = ((ch - k + 26) % 26) + 'A';
+            j++;
+        } else {
+            decrypted[i] = ch;
+        }
+    }
+    decrypted[i] = '\0';
+}
+
+int main() {
+    char plaintext[100], key[100], ciphertext[100], decrypted[100];
+
+    printf("Enter plaintext: ");
+    gets(plaintext);
+
+    printf("Enter keyword: ");
+    gets(key);
+
+    encryptPoly(plaintext, key, ciphertext);
+    printf("Encrypted text: %s\n", ciphertext);
+
+    decryptPoly(ciphertext, key, decrypted);
+    printf("Decrypted text: %s\n", decrypted);
+
+    return 0;
+}
