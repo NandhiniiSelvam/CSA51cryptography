@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+void xor_encrypt(char* plaintext, char* key, char* ciphertext) {
+    int i;
+    int len = strlen(plaintext);
+    int key_len = strlen(key);
+
+    for (i = 0; i < len; i++) {
+        ciphertext[i] = plaintext[i] ^ key[i % key_len];
+    }
+    ciphertext[i] = '\0';
+}
+
+int main() {
+    char plaintext[100], key[100], ciphertext[100], decrypted[100];
+
+    printf("Enter plaintext (max 100 characters): ");
+    gets(plaintext);
+
+    printf("Enter 8-character key: ");
+    gets(key);
+
+    xor_encrypt(plaintext, key, ciphertext);
+
+    printf("\nEncrypted (hex): ");
+    for (int i = 0; i < strlen(plaintext); i++) {
+        printf("%02X ", (unsigned char)ciphertext[i]);
+    }
+
+    xor_encrypt(ciphertext, key, decrypted);
+    printf("\nDecrypted text: %s\n", decrypted);
+
+    return 0;
+}
