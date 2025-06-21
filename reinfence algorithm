@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char text[100], rail1[100] = "", rail2[100] = "";
+    int r1 = 0, r2 = 0;
+    printf("Enter text: ");
+    gets(text);
+
+    for (int i = 0; text[i]; i++) {
+        if (i % 2 == 0)
+            rail1[r1++] = text[i];
+        else
+            rail2[r2++] = text[i];
+    }
+
+    rail1[r1] = '\0';
+    rail2[r2] = '\0';
+    strcat(rail1, rail2);
+
+    printf("Cipher Text: %s\n", rail1);
+    return 0;
+}
