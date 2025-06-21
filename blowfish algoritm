@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+
+uint32_t F(uint32_t x) {
+    return ((x >> 4) ^ (x << 3)) + 0xABCDEF01;
+}
+
+void encrypt(uint32_t *L, uint32_t *R) {
+    for (int i = 0; i < 8; i++) {
+        *L ^= F(*R);
+        *R ^= F(*L);
+    }
+}
+
+void decrypt(uint32_t *L, uint32_t *R) {
+    for (int i = 0; i < 8; i++) {
+        *R ^= F(*L);
+        *L ^= F(*R);
+    }
+}
+
+int main() {
+    char text[9];
+    uint32_t L, R;
+
+    printf("Enter 8-character text: ");
+    fgets(text, 9, stdin);
+
+    memcpy(&L, text, 4);
+    memcpy(&R, text + 4, 4);
+
+    encrypt(&L, &R);
+    printf("Encrypted: %08X %08X\n", L, R);
+
+    decrypt(&L, &R);
+    memcpy(text, &L, 4);
+    memcpy(text + 4, &R, 4);
+    text[8] = '\0';
+
+    printf("Decrypted: %s\n", text);
+    return 0;
+}
