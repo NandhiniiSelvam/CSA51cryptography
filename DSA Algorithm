@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+long long mod_pow(long long b, long long e, long long m) {
+    long long r = 1;
+    while (e) {
+        if (e % 2) r = (r * b) % m;
+        b = (b * b) % m;
+        e /= 2;
+    }
+    return r;
+}
+
+long long mod_inv(long long a, long long m) {
+    for (int x = 1; x < m; x++)
+        if ((a * x) % m == 1) return x;
+    return -1;
+}
+
+int main() {
+    long long p = 23, q = 11, g = 2;
+    long long x, H, k = 3;
+
+    printf("Enter private key x (1-%lld): ", q - 1);
+    scanf("%lld", &x);
+    printf("Enter message hash H: ");
+    scanf("%lld", &H);
+
+    long long y = mod_pow(g, x, p);
+    long long r = mod_pow(g, k, p) % q;
+    long long s = (mod_inv(k, q) * (H + x * r)) % q;
+
+    printf("Public key y = %lld\n", y);
+    printf("Signature: (r = %lld, s = %lld)\n", r, s);
+
+    long long w = mod_inv(s, q);
+    long long u1 = (H * w) % q, u2 = (r * w) % q;
+    long long v = ((mod_pow(g, u1, p) * mod_pow(y, u2, p)) % p) % q;
+
+    if (v == r) printf("Signature is VALID\n");
+    else printf("Signature is INVALID\n");
+
+    return 0;
+}
